@@ -1,20 +1,10 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang=en>
 <head>
 <meta charset=utf-8>
 <meta name="viewport" content="width=device-width; height=device-height; initial-scale=1.0; maximum-scale=1.0;" /> 
-<title></title>
+<title>JSTouchController simple touch demo</title>
 <style type="text/css"> 
-	
-	* {
-	  -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
-	  -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
-	/* make transparent link selection, adjust last value opacity 0 to 1.0 */
-	  -webkit-tap-highlight-color: rgba(0,0,0,0); 
-	  -webkit-user-select: none; /* prevent copy paste, to allow, change 'none' to 'text' */
-	  -webkit-tap-highlight-color: rgba(0,0,0,0); 
-	}
-	
 	body {
 		background-color: #000000;
 		margin: 0px;
@@ -45,7 +35,7 @@ setupCanvas();
 
 var mouseX, mouseY, 
 	// is this running in a touch capable environment?
-	touchable = 'createTouch' in document,
+	touchable = 'ontouchstart' in window || 'createTouch' in document,
 	touches = []; // array of touch vectors
 
 setInterval(draw, 1000/35); 
@@ -58,7 +48,6 @@ if(touchable) {
 	window.onorientationchange = resetCanvas;  
 	window.onresize = resetCanvas;  
 } else {
-	
 	canvas.addEventListener( 'mousemove', onMouseMove, false );
 }
 
@@ -78,8 +67,6 @@ function init(){
 function draw() {
   
 	c.clearRect(0,0,canvas.width, canvas.height); 
-	
-	
 	
 	if(touchable) {
 	
@@ -102,7 +89,6 @@ function draw() {
 		c.fillText("mouse : "+mouseX+", "+mouseY, mouseX, mouseY); 
 		
 	}
-	//c.fillText("hello", 0,0); 
 	
 }
 
@@ -128,25 +114,22 @@ function draw() {
  */	
 
 function onTouchStart(e) {
- 
+	// Prevent the browser from reacting to long press / "touch and hold"
+	e.preventDefault();
 	touches = e.touches; 
 }
  
 function onTouchMove(e) {
-	 // Prevent the browser from doing its default thing (scroll, zoom)
+	// Prevent the browser from doing its default thing (scroll, zoom)
 	e.preventDefault();
 	touches = e.touches; 
-	
 } 
  
-function onTouchEnd(e) { 
-   
+function onTouchEnd(e) {   
    	touches = e.touches; 
-   
 }
 
 function onMouseMove(event) {
-
 	mouseX = event.offsetX;
 	mouseY = event.offsetY;
 }
